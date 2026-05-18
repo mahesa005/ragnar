@@ -1,0 +1,30 @@
+TASK 1
+Ingest:
+  - Buat POST endpoint /ingest
+  - Terima file upload
+  - Validasi format PDF
+  - Simpan sementara ke disk
+
+Extract per halaman:
+  - PyMuPDF: extract teks + posisi y
+  - PyMuPDF: extract gambar + posisi y
+  - pdfplumber: extract tabel + posisi y
+  - Sort semua elemen by y-coordinate
+  - Simpan sebagai list of dict per halaman
+
+Image handling:
+  - Tiap gambar dikirim ke Qwen2.5-VL
+  - Retrieve deskripsi
+  - Replace elemen gambar dengan deskripsinya
+
+Combine per halaman:
+  - Gabung semua elemen jadi satu teks per halaman
+  - Attach metadata: page_number, content_type
+
+Chunking:
+  - Split teks per halaman jadi chunks dengan overlap
+  - Tiap chunk inherit metadata halamannya
+
+Embedding + store:
+  - Embed tiap chunk via bge-m3
+  - Simpan ke ChromaDB: vector + teks + metadata
