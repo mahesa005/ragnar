@@ -3,6 +3,9 @@ from fastapi import UploadFile, File, HTTPException
 from ..core.config import UPLOAD_DIR, MAX_FILE_SIZE
 
 async def validate_file(file: UploadFile):
+    """
+    Validates upload file extentsion, type, error handling
+    """
     # 1. Check file type
     # Retrieve file type
     if not file.filename.lower().endswith(".pdf"):
