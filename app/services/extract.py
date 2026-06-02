@@ -91,3 +91,21 @@ def extract_page(plumber_page: pdfplumber.page.Page, fitz_page: fitz.Page, page_
     # sort all elements base on y    
     all_elements.sort(key=lambda x: x["y"])
     return all_elements
+
+def extract_pdf(pdf_path: str) -> list:
+    plumber_doc = pdfplumber.open(pdf_path)
+    fitz_doc = fitz.open(pdf_path)
+
+    # retrieve pages
+    plumber_doc_pages = plumber_doc.pages
+    
+    all_elements = []
+    for i in range (len(plumber_doc_pages)):
+        page_extraction = extract_page(plumber_doc_pages[i], fitz_doc[i], i + 1)
+        all_elements.extend(page_extraction)
+    
+    # close docs
+    plumber_doc.close()
+    fitz_doc.close()
+   
+    return all_elements
