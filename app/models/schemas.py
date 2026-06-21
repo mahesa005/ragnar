@@ -14,3 +14,4 @@ class QueryResponse(BaseModel):
 class IngestResponse(BaseModel):
     status: str
     message: str
+    elements: list = []
