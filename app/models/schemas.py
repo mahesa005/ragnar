@@ -9,7 +9,6 @@ class Sources(BaseModel):
 
 class QueryResponse(BaseModel):
     response: str
-    sources: list[Sources]
 
 class IngestResponse(BaseModel):
     status: str

@@ -17,3 +17,9 @@ UPLOAD_DIR = Path("data/pdf_uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
 
 MAX_FILE_SIZE = 50 * 1_024 * 1_024
+
+CHROMA_MAX_QUERY_RESULT = 5
+
+LLM_TEMPERATURE = 0.1
+LLM_TOP_P = 0.95
+LLM_MAX_TOKENS = 1024

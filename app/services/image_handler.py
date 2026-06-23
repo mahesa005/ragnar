@@ -39,9 +39,11 @@ def process_images(elements: list) -> list:
     """
     image_count = sum(1 for e in elements if e["type"] == "image")
     print(f"Total images to process: {image_count}")
-    
-    for i, element in enumerate(elements):
+
+    image_num = 0
+    for element in elements:
         if element["type"] == "image":
-            print(f"Processing image {i+1}...")
+            image_num += 1
+            print(f"Processing image {image_num}/{image_count}...")
             element["content"] = describe_image(element["content"])
     return elements

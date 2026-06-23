@@ -3,6 +3,8 @@ from ..core.config import CHUNK_SIZE, CHUNK_OVERLAP
 from ..services.extract import extract_pdf
 from ..services.image_handler import process_images
 from ..services.embed import store_to_chromadb
+from ..services.query import llm_query
+from ..services.retrieval import chroma_db_query
 
 
 def run_ingestion_pipeline(pdf_path: str):
@@ -51,3 +53,7 @@ def group_by_page(elements: list) -> dict:
         pages[page_num] += content + "\n"
     
     return pages
+
+def retrieval_pipeline(query: list[str]):
+    RAG_results = chroma_db_query(query)
+    return llm_query(query, RAG_results)
