@@ -37,7 +37,11 @@ def process_images(elements: list) -> list:
     loop every element that is an image,
     returns the description and replaces the image itself
     """
-    for element in elements:
+    image_count = sum(1 for e in elements if e["type"] == "image")
+    print(f"Total images to process: {image_count}")
+    
+    for i, element in enumerate(elements):
         if element["type"] == "image":
+            print(f"Processing image {i+1}...")
             element["content"] = describe_image(element["content"])
     return elements
