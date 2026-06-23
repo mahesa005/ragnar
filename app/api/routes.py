@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File
 from pydantic import BaseModel
 from ..models.schemas import QueryRequest, QueryResponse, IngestResponse
 from ..services.ingest import validate_file, save_file
-from ..services.extract import extract_pdf
+from ..services.pipeline import run_ingestion_pipeline
 
 router = APIRouter()
 
@@ -14,8 +14,8 @@ def ping():
 async def ingest(file: UploadFile = File(...)):
     await validate_file(file)
     file_path = await save_file(file)
-    pdf_content = extract_pdf(file_path)
-    return IngestResponse(status="success", message="File validated successfully", elements=[pdf_content])
+    chunks = run_ingestion_pipeline(file_path)
+    return IngestResponse(status="success", message=f"Processed {len(chunks)} chunks from {file.filename}")
 
 @router.post("/query", response_model=QueryResponse)
 def query(request: QueryRequest):   
