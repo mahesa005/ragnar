@@ -7,16 +7,28 @@ client = Groq(
 
 def clean_response(response: str) -> str:
     """
-    clean LLM response: remove thinking tags, format newlines, clean up markup
+    clean LLM response: remove thinking tags, remove markdown formatting
     """
-    # Remove thinking tags
-    if "</think>" in response:
-        response = response.split("</think>", 1)[1].strip()
+    import re
 
-    # Clean up escaped newlines and other formatting
-    response = response.replace("\\n", "\n")
-    response = response.replace("\\_", "_")
-    response = response.replace("\\*", "*")
+    # Remove thinking tags and content
+    if "<think>" in response:
+        think_end = response.find("</think>")
+        if think_end != -1:
+            response = response[think_end + 8:].strip()
+        else:
+            response = response.split("<think>", 1)[1].strip()
+
+    # Remove markdown bold/italic formatting
+    response = re.sub(r'\*\*(.+?)\*\*', r'\1', response)  # **bold** → bold
+    response = re.sub(r'\*(.+?)\*', r'\1', response)      # *italic* → italic
+    response = re.sub(r'\_(.+?)\_', r'\1', response)      # _italic_ → italic
+
+    # Remove markdown list markers
+    response = re.sub(r'^\s*[-*+]\s+', '', response, flags=re.MULTILINE)  # - item → item
+
+    # Clean up extra whitespace
+    response = re.sub(r'\n\s*\n+', '\n\n', response)  # multiple newlines → double newline
 
     return response.strip()
 
